@@ -8,25 +8,34 @@ export const TMDB_CONFIG = {
     }
 }
 
-export const fetchPopularMovies = async ({ query}: { query: string }) => {
+export const fetchPopularMovies = async ({ query }: { query: string }) => {
+    if (!TMDB_CONFIG.API_KEY) {
+      console.error("Error: API Key is missing.");
+      return [];
+    }
+  
     const endpoint = query 
-        ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
-        : `${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc`;
-
-    const reponse = await fetch(endpoint, {
+      ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+      : `${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc`;
+  
+    try {
+      const response = await fetch(endpoint, {
         method: 'GET',
         headers: TMDB_CONFIG.headers
-    })
-
-    if(!reponse.ok) {
-        throw new Error(`Failed to fetch movies: ${reponse.statusText}`);
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Failed to fetch movies: ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+      console.log("Fetched movies:", data.results); // 🟢 Verifica los datos obtenidos
+      return data.results || []; // ✅ Retorna un array vacío si no hay resultados
+    } catch (error) {
+      console.error("Error fetching movies:", error);
+      return []; // ✅ Evita que retorne `null` o valores inesperados
     }
-
-    const data = await reponse.json();
-
-    return data.results;
-
-}
+  };
 
 
 /*
