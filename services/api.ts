@@ -29,27 +29,12 @@ export const fetchPopularMovies = async ({ query }: { query: string }) => {
       }
   
       const data = await response.json();
-      console.log("Fetched movies:", data.results); // 🟢 Verifica los datos obtenidos
+
       return data.results || []; // ✅ Retorna un array vacío si no hay resultados
+      
     } catch (error) {
       console.error("Error fetching movies:", error);
       return []; // ✅ Evita que retorne `null` o valores inesperados
     }
   };
 
-
-/*
-    const url = 'https://api.themoviedb.org/3/authentication';
-    const options = {
-    method: 'GET',
-    headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMWRlOWU2MWRjZmJkYzU5OGZmMjg5Y2RlNTkyYTBiOCIsIm5iZiI6MTc0MTk0OTEzNi4zNDgsInN1YiI6IjY3ZDQwOGQwNTA2Y2M5MGQ2NDAyNzk1OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.PeqEp3uddEW6pswW0OxnQdPwJPG8BTdqhxtZPF8rSJs'
-    }
-    };
-
-    fetch(url, options)
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => console.error(err));
-*/

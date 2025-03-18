@@ -10,6 +10,7 @@ import { icons } from '@/constants/icons'
     vote_average,
     release_date,
   }: Movie)  => {
+
    return (
         
     <Link href={`/movies/${id}`} asChild>

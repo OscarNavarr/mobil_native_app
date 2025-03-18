@@ -30,17 +30,7 @@ const Search = () => {
   useEffect(() => {
     const timeoutId = setTimeout(async () => {
       if (searchQuery.trim()) {
-       
-        
-        const newMovies = await loadMovies();
-
-        // Call updateSearchCount only if there are results
-        if (newMovies?.length > 0) {
-          await updateSearchCount(searchQuery, movies[0]);
-        } else {
-          console.warn("No valid movies found for search:", searchQuery);
-        }
-
+        await loadMovies();
       } else {
         reset();
       }
@@ -48,6 +38,14 @@ const Search = () => {
 
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
+
+  useEffect(() => {
+    // Call updateSearchCount only if there are results
+    if (movies?.length! > 0 && movies?.[0]) {
+      console.log("Updating search count for", movies[0].title);
+      updateSearchCount(searchQuery, movies[0]);
+    }
+  }, [movies]);
 
   return (
     <View className="flex-1 bg-primary">
@@ -60,7 +58,7 @@ const Search = () => {
       <FlatList
         className="px-5"
         data={movies as Movie[]}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => <MovieDisplayCard {...item} />}
         numColumns={3}
         columnWrapperStyle={{
